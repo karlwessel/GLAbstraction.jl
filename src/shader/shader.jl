@@ -8,6 +8,22 @@ end
 
 abstract type AbstractShader end
 
+"""
+A compiled GLSL shader.
+
+Creation from a source file is easiest by using FileIOs load() method.
+
+```
+julia> using FileIO
+
+julia> load("shader.vert");
+
+julia> load("shader.frag");
+```
+
+The file extensions '.vert', '.frag', '.geom' and '.comp' are needed to
+determine the shader type automatically.
+"""
 struct Shader <: AbstractShader
     name    ::Symbol
     source  ::Vector{UInt8} #UInt representation of the source program string,
