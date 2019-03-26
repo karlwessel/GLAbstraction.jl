@@ -149,6 +149,7 @@ function set_uniform(program::Program, name::Symbol, vals::Tuple)
 end
 function set_uniform(program::Program, name::Symbol, val)
     loc = uniform_location(program, name)
+    bind(program)
     if loc != INVALID_UNIFORM
         gluniform(loc, val)
     end
