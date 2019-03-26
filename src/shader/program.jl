@@ -154,6 +154,10 @@ function set_uniform(program::Program, name::Symbol, vals::Tuple)
         gluniform(loc, vals...)
     end
 end
+# TODO: how are uniform members of struct handled? Their name is something
+#       like 'struct.field', but that is not a valid symbol
+# TODO: check the type of the uniform and and convert the passed value to
+#       an appropriate type
 function set_uniform(program::Program, name::Symbol, val)
     loc = uniform_location(program, name)
     bind(program)
