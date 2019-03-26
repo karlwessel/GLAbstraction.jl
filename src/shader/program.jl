@@ -53,13 +53,20 @@ mutable struct Program <: AbstractProgram
     uniforms  ::Vector{UniformTuple}
     attributes::Vector{AttributeTuple}
     context   ::AbstractContext
-    function Program(shaders::Vector{Shader}, fragdatalocation::Vector{Tuple{Int, String}})
+    function Program(shaders::Vector{Shader};
+                     attriblocation::Vector{Tuple{Int, String}}=Tuple{Int, String}[],
+                     fragdatalocation::Vector{Tuple{Int, String}}=Tuple{Int, String}[])
         # Remove old shaders
         #exists_context()
         program = glCreateProgram()::GLuint
         #attach new ones
         foreach(shaders) do shader
             glAttachShader(program, shader.id)
+        end
+
+        #Bind vertex data
+        for (location, name) in attriblocation
+            glBindAttribLocation(program, location, ascii(name))
         end
 
         #Bind frag data
@@ -86,7 +93,7 @@ mutable struct Program <: AbstractProgram
     end
 end
 
-Program(shaders::Vector{Shader}) = Program(shaders, Tuple{Int, String}[])
+#Program(shaders::Vector{Shader}) = Program(shaders)
 
 #REVIEW: This is a bit redundant seen as there is `load(source)` from FilIO for shaders but ok
 function Program(sh_string_typ...)
@@ -238,7 +245,7 @@ LazyProgram(sources...; data...) = LazyProgram(Vector(sources), Dict(data), noth
 function Program(lazy_program::LazyProgram)
     fragdatalocation = get(lazy_program.data, :fragdatalocation, Tuple{Int, String}[])
     shaders = haskey(lazy_program.data, :arguments) ? Shader.(lazy_program.sources, Ref(lazy_program.data[:arguments])) : Shader.()
-    return Program([shaders...], fragdatalocation)
+    return Program([shaders...], fragdatalocation=fragdatalocation)
 end
 function bind(program::LazyProgram)
     iscompiled_orcompile!(program)
