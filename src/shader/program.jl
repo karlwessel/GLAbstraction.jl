@@ -55,7 +55,7 @@ mutable struct Program <: AbstractProgram
     context   ::AbstractContext
     function Program(shaders::Vector{Shader}, fragdatalocation::Vector{Tuple{Int, String}})
         # Remove old shaders
-        exists_context()
+        #exists_context()
         program = glCreateProgram()::GLuint
         #attach new ones
         foreach(shaders) do shader
