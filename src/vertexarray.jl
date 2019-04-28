@@ -141,6 +141,9 @@ end
 Base.convert(::Type{VertexArray}, x) = VertexArray(x)
 Base.convert(::Type{VertexArray}, x::VertexArray) = x
 
+# TODO: what is the purpose of this method?
+#		if only to convert a face length to a primitive then including
+#		GL_TRIANGLE_STRIP and GL_LINE_STRIP_ADJACENCY is not sensible
 function face2glenum(face)
     facelength = typeof(face) <: Integer ? face : (face <: Integer ? 1 : length(face))
     facelength == 1  && return GL_POINTS
@@ -152,6 +155,7 @@ function face2glenum(face)
     return GL_TRIANGLES
 end
 
+# TODO: what is the purpose of this method?
 function glenum2face(glenum)
     glenum == GL_POINTS               && return 1
     glenum == GL_LINES                && return 2
