@@ -16,6 +16,7 @@ set_context!(Context(:window))
 
 
 @testset "Test vertex array" begin
+    # test single buffer Triangle VA
     vec = rand(SVector{3, GLfloat}, 8)
     buffer = Buffer(vec)
 
@@ -27,9 +28,36 @@ set_context!(Context(:window))
     @test length(vao) == 8
     @test repr(vao) != ""
 
+    @test glGetError() == 0
     bind(vao)
+    @test glGetError() == 0
     unbind(vao)
+    @test glGetError() == 0
     draw(vao)
+    @test glGetError() == 0
+
+    # test double buffer triangle VA
+    vec2 = rand(SVector{2, GLfloat}, 8)
+    buffer2 = Buffer(vec2)
+
+    attinfo2 = BufferAttachmentInfo(:testbuffer2, GLint(1), buffer2,
+        GEOMETRY_DIVISOR)
+    vao2 = VertexArray(BufferAttachmentInfo[attinfo, attinfo2], 3)
+    @test vao.id != vao2.id
+
+    @test bufferinfo(vao2, :testbuffer) == attinfo
+    @test bufferinfo(vao2, :testbuffer2) == attinfo2
+    @test length(vao2) == 8
+    @test repr(vao2) != ""
+
+    @test glGetError() == 0
+    bind(vao2)
+    @test glGetError() == 0
+    draw(vao2)
+    @test glGetError() == 0
+    unbind(vao2)
+    @test glGetError() == 0
+
 end
 
 # clean up test context
