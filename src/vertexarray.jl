@@ -20,7 +20,9 @@ mutable struct VertexArray{Vertex, Kind}
     ninst      ::GLint
     face       ::GLenum
     context    ::AbstractContext
-    function VertexArray(kind::VaoKind, bufferinfos::Vector{BufferAttachmentInfo}, indices, ninst, face)
+    function VertexArray(kind::VaoKind,
+						 bufferinfos::Vector{BufferAttachmentInfo},
+						 indices, ninst, face)
         id = glGenVertexArrays()
         glBindVertexArray(id)
 
@@ -65,8 +67,11 @@ mutable struct VertexArray{Vertex, Kind}
 	end
 end
 
+VertexArray(bufferinfos::Vector{BufferAttachmentInfo}, face::GLenum) =
+    VertexArray(SIMPLE, bufferinfos, nothing, 1, face)
 VertexArray(bufferinfos::Vector{BufferAttachmentInfo}, facelength::Int) =
-    VertexArray(SIMPLE, bufferinfos, nothing, 1, face2glenum(facelength))
+    VertexArray(bufferinfos, face2glenum(facelength))
+
 
 VertexArray(bufferinfos::Vector{BufferAttachmentInfo}, indices::Vector{Int}, facelength::Int) =
     VertexArray(ELEMENTS, bufferinfos, indexbuffer(indices), 1, face2glenum(facelength))

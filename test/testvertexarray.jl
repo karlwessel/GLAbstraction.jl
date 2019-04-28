@@ -15,8 +15,10 @@ c = createtestcontext()
     vec = rand(SVector{3, GLfloat}, 8)
     buffer = Buffer(vec)
 
-    attinfo = BufferAttachmentInfo(:testbuffer, GLint(0), buffer, GEOMETRY_DIVISOR)
-    vao = VertexArray(BufferAttachmentInfo[attinfo], 3)
+    attinfo = BufferAttachmentInfo(:testbuffer, GLint(0), buffer,
+        GEOMETRY_DIVISOR)
+    @testnoglerror vao = VertexArray(BufferAttachmentInfo[attinfo], 3)
+    @test vao.face == GL_TRIANGLES
 
     @test !is_null(vao)
     @test bufferinfo(vao, :testbuffer) == attinfo
@@ -36,8 +38,9 @@ c = createtestcontext()
         GEOMETRY_DIVISOR)
     @testnoglerror
     @testnoglerror vao2 = VertexArray(BufferAttachmentInfo[attinfo, attinfo2],
-        3)
+        GL_LINE_STRIP)
     @test vao.id != vao2.id
+    @test vao2.face == GL_LINE_STRIP
 
     @test bufferinfo(vao2, :testbuffer) == attinfo
     @test bufferinfo(vao2, :testbuffer2) == attinfo2
