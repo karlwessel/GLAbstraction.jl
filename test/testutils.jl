@@ -1,5 +1,6 @@
 using Test
 using GLFW
+using GLAbstraction: Context, set_context!
 
 function createtestcontext()
     # create a GL context for tests

@@ -1,7 +1,7 @@
 module TestVertexArray
 using ModernGL
 using Test
-using GLAbstraction: Context, set_context!, Buffer, VertexArray,
+using GLAbstraction: Buffer, VertexArray,
     GEOMETRY_DIVISOR, BufferAttachmentInfo, is_null, bind, unbind, draw,
     bufferinfo
 using StaticArrays

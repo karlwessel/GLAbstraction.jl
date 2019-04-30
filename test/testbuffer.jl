@@ -1,7 +1,7 @@
 module TestBuffer
 using ModernGL
 using Test
-using GLAbstraction: Context, set_context!, Buffer, bind, unbind
+using GLAbstraction: Buffer, bind, unbind
 using StaticArrays
 
 include("testutils.jl")

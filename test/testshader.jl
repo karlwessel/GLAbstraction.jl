@@ -2,17 +2,13 @@ module TestShader
 using ModernGL
 using GLAbstraction: shadertype, attributes, uniform_location, uniform_type,
     uniform_size, attribute_location, getinfolog, Program, set_uniform,
-    bind, set_context!, Context
+    bind
 using Test
 using FileIO
-using GLFW
+include("testutils.jl")
 
 # create a GL context for tests
-GLFW.WindowHint(GLFW.VISIBLE, false)
-window = GLFW.CreateWindow(640, 480, "Test context")
-@test window != C_NULL
-GLFW.MakeContextCurrent(window)
-set_context!(Context(:window))
+c = createtestcontext()
 
 
 @testset "Test shaders" begin
@@ -101,5 +97,5 @@ set_context!(Context(:window))
  end
 
 # clean up test context
-GLFW.DestroyWindow(window)
+freetestcontext(c)
 end
