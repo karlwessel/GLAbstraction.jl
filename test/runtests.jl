@@ -4,6 +4,7 @@ function is_ci()
     get(ENV, "CI", "") == "true"
 end
 
+include("testtexture.jl")
 include("testbuffer.jl")
 include("testvertexarray.jl")
 include("testshader.jl")
