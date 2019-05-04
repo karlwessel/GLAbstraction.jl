@@ -48,7 +48,7 @@ function texturetype_from_dimensions(ndim::Integer)
     @error "Dimensionality: $(ndim), not supported for OpenGL texture"
 end
 
-@generated function textureformat_internal_from_type(::Type{T}) where T
+function textureformat_internal_from_type(::Type{T}) where T
     if T <: Depth{Float32}
         return :GL_DEPTH_COMPONENT32F
     elseif T <: DepthStencil{Float24, N0f8}
@@ -76,7 +76,7 @@ end
     end
     glenumsym = Symbol(sym)
     @assert isdefined(ModernGL, glenumsym) "$T doesn't have a proper mapping to an OpenGL format."
-    return :($glenumsym)
+    return eval(glenumsym)
 end
 
 function textureformat_from_type_sym(dim::Integer, isinteger::Bool, order::AbstractString)
@@ -103,10 +103,10 @@ function textureformat_from_type_sym(::Type{T}) where T
 end
 
 textureformat_from_type_sym(::Type{<:DepthFormat}) = :GL_DEPTH_COMPONENT
-@generated function textureformat_from_type(::Type{T}) where T
+function textureformat_from_type(::Type{T}) where T
     sym = textureformat_from_type_sym(T)
     @assert isdefined(ModernGL, sym) "$T doesn't have a proper mapping to an OpenGL format"
-    return :($sym)
+    return eval(sym)
 end
 
 struct TextureParameters{NDim}
