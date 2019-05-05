@@ -12,6 +12,7 @@ GLFW = "f7f18e0c-5ee9-5ccd-a5bf-e8befd85ed98"
 ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
 
 [targets]
-test = ["StaticArrays", "GLFW", "ImageMagick", "Test"]
+test = ["StaticArrays", "GLFW", "ImageMagick", "Test", "Images"]
