@@ -1,7 +1,7 @@
 module TestTexture
 using ModernGL
 using Test
-using GLAbstraction: Texture, bind, texparameter
+using GLAbstraction: Texture, bind, texparameter, glasserteltype
 using StaticArrays
 using FileIO
 using Images
@@ -11,6 +11,10 @@ include("testutils.jl")
 # create a GL context for tests
 c = createtestcontext()
 
+function Texture(image::AbstractArray{T, NDim}; kw_args...) where {T, NDim}
+    glasserteltype(T)
+    Texture(pointer(image), size(image); kw_args...)::Texture{T, NDim}
+end
 
 @testset "Test Texture" begin
     img = load("rgb_test.png")
@@ -41,6 +45,10 @@ c = createtestcontext()
             GLenum[GL_RED, GL_RED, GL_RED, GL_RED])
     @testnoglerror bind(tex_swizzle)
     
+    # test with more abstract array types
+    @testnoglerror tex_black = Texture(colorview(RGBA, zeros(GLfloat, 4, 2, 2)))
+    @test tex_black.id != 0
+    @testnoglerror bind(tex_black)
 end
 
 # clean up test context
